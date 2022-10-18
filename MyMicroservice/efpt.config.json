@@ -1,0 +1,73 @@
+﻿{
+   "CodeGenerationMode": 2,
+   "ContextClassName": "BikeStoresDBContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Db",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "MyMicroservice",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[production].[brands]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[production].[categories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[production].[products]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[production].[stocks]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[sales].[customers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[sales].[order_items]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[sales].[orders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[sales].[staffs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[sales].[stores]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "NZHELYAZKOVCM\\SQLEXPRESS.BikeStores",
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoConstructor": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

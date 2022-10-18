@@ -11,5 +11,6 @@ namespace MyMicroservice.Models
 
         public int Age { get; set; }
 
+        public int Id { get; set; }
     }
 }

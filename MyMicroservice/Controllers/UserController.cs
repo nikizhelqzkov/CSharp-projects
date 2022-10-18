@@ -11,33 +11,28 @@ namespace MyMicroservice.Controllers
     {
         private readonly User[] _users = new[]
         {
-            new User { Username = "JDN", Name = "John Doe", Age = 42 },
-            new User { Username = "JDNW", Name = "Jane Doe", Age = 39 },
-            new User { Username = "SD", Name = "Sammy Doe", Age = 13 },
+            new User { Username = "JDN", Name = "John Doe", Age = 42 , Id = 1},
+            new User { Username = "JDNW", Name = "Jane Doe", Age = 39, Id = 2 },
+            new User { Username = "SD", Name = "Sammy Doe", Age = 13, Id = 3 },
         };
 
 
         // GET: api/<UserController>
         [HttpGet]
-        public List<User> GetAllUsers()
+        public ActionResult<IEnumerable<User>> GetAll()
         {
-            return this._users.ToList();
+            return Ok(this._users);
         }
 
         [HttpGet("{id}")]
-        public User GetUser(int id)
+        public ActionResult<User> GetUser(int id)
         {
             if (id > this._users.Length - 1)
             {
-                return new User
-                {
-                    Username = "Username",
-                    Name = "User name",
-                    Age = 0
-                };
+                return NotFound(id);
             }
-
-            return this._users[id];
+            var result = this._users.Where(r => r.Id == id).FirstOrDefault();
+            return Ok(result);
         }
     }
 
