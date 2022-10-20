@@ -1,4 +1,4 @@
-﻿using MyMicroservice.Db;
+﻿using MyMicroservice.DataContext;
 
 namespace MyMicroservice.DataAccess.DataProvider.Interfaces
 {

@@ -43,7 +43,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyMicroservice.DataAccess.DataProvider.Clients;
 using MyMicroservice.DataAccess.DataProvider.Interfaces;
-using MyMicroservice.Db;
+using MyMicroservice.DataContext;
 using MyMicroservice.Services;
 
 namespace BikeApp

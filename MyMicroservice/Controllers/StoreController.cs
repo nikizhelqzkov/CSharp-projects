@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyMicroservice.DataAccess.DataProvider.Interfaces;
-using MyMicroservice.Db;
+using MyMicroservice.Models;
 using MyMicroservice.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,7 +18,7 @@ namespace MyMicroservice.Controllers
             _service = service;
         }
         [HttpGet]
-        public ActionResult<List<Store>> Get()
+        public ActionResult<List<Store>> GetAllStores()
         {
             var result = _service.GetStores();
             if (result != null)
@@ -30,15 +30,22 @@ namespace MyMicroservice.Controllers
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<Store> GetStore(int id)
         {
-            return "value";
+            var result = _service.GetStoreById(id);
+            if (result == null)
+            {
+                return NotFound(id);
+            }
+            return Ok(result);
         }
 
         // POST api/<ValuesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Store request)
         {
+            _service.AddStore(request);
+            return Created($"Added new store with id", request);
         }
 
         // PUT api/<ValuesController>/5

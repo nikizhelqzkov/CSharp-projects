@@ -1,5 +1,5 @@
 ﻿using MyMicroservice.DataAccess.DataProvider.Interfaces;
-using MyMicroservice.Db;
+using MyMicroservice.Models;
 
 namespace MyMicroservice.Services
 {
@@ -10,6 +10,17 @@ namespace MyMicroservice.Services
         public StoreService(IStoreDataProvider storeDataProvider)
         {
             _storeDataProvider = storeDataProvider;
+        }
+
+        public void AddStore(Store data)
+        {
+            _storeDataProvider.AddStore(data);
+        }
+
+        public Store GetStoreById(int id)
+        {
+            var result = _storeDataProvider.GetStoreById(id);
+            return result;
         }
 
         public List<Store> GetStores()
