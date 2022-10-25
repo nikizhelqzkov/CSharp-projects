@@ -16,9 +16,7 @@ namespace MyMicroservice.DataAccess.DataProvider.Clients
         public Store GetStoreById(int id)
         {
 
-            var result = DbContext.Stores
-                .Include(store => store.Orders)
-                .FirstOrDefault(store => store.StoreId == id);
+            var result = DbContext.Stores.FirstOrDefault(store => store.StoreId == id);
             return result;
 
         }
@@ -38,6 +36,20 @@ namespace MyMicroservice.DataAccess.DataProvider.Clients
         {
             return DbContext.Stores.Select(i => i.StoreId).Max();
         }
+
+        public Store GetStoreByIdWithDetails(int id)
+        {
+            var result = DbContext.Stores
+               .Include(store => store.Orders)
+               .FirstOrDefault(store => store.StoreId == id);
+            return result;
+        }
+
+        public void UpdateStoreById()
+        {
+            DbContext.SaveChanges();
+        }
+
     }
 
 }

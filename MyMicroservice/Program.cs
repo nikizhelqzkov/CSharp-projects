@@ -1,49 +1,8 @@
-//using Microsoft.EntityFrameworkCore;
-//using MyMicroservice.DataAccess.DataProvider.Clients;
-//using MyMicroservice.DataAccess.DataProvider.Interfaces;
-//using MyMicroservice.Db;
-
-//var builder = WebApplication.CreateBuilder(args);
-
-//// Add services to the container.
-
-//builder.Services.AddControllers();
-//// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-
-//builder.Services
-//               .AddSwaggerGen()
-//               .AddDbContext<BikeStoresDBContext>(options =>
-//               {
-//                   options.UseSqlServer("Data Source=NZHELYAZKOVCM\\SQLEXPRESS;Initial Catalog=BikeStores;Integrated Security=True");
-//               })
-//               .AddScoped<IStoreDataProvider, StoreProvider>()
-//               .AddControllers()
-//               .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
-
-//var app = builder.Build();
-
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-
-//app.UseAuthorization();
-
-//app.MapControllers();
-
-//app.Run();
-
-
-
 using Microsoft.EntityFrameworkCore;
 using MyMicroservice.DataAccess.DataProvider.Clients;
 using MyMicroservice.DataAccess.DataProvider.Interfaces;
 using MyMicroservice.DataContext;
+using MyMicroservice.Helper;
 using MyMicroservice.Services;
 
 namespace BikeApp
@@ -57,7 +16,7 @@ namespace BikeApp
             builder.Services.AddSwaggerGen();
             builder.Services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             //builder.Services.AddDbContext<FMCData81_DevHackathonContext>(options =>
             //{
             //    options.UseSqlServer(builder.Configuration.GetConnectionString("FmcUser"));
@@ -67,7 +26,9 @@ namespace BikeApp
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Local"));
             })
                 .AddScoped<IStoreService, StoreService>()
+                .AddScoped<IOrderService, OrderService>()
                 .AddScoped<IStoreDataProvider, StoreProvider>()
+                .AddScoped<IOrderProvider, OrderProvider>()
              .AddControllers()
              .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             var app = builder.Build();

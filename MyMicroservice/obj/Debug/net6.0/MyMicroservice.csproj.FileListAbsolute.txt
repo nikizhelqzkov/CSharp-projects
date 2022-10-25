@@ -294,3 +294,5 @@ C:\work\CSharp-projects\MyMicroservice\bin\Debug\net6.0\runtimes\win\lib\netstan
 C:\work\CSharp-projects\MyMicroservice\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\work\CSharp-projects\MyMicroservice\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\work\CSharp-projects\MyMicroservice\bin\Debug\net6.0\web.config
+C:\work\CSharp-projects\MyMicroservice\bin\Debug\net6.0\AutoMapper.dll
+C:\work\CSharp-projects\MyMicroservice\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

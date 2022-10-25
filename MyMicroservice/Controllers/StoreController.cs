@@ -50,14 +50,16 @@ namespace MyMicroservice.Controllers
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] Store request)
         {
+            if (request is null)
+            {
+                return BadRequest();
+            }
+            _service.UpdateStoreById(id, request);
+            return Ok();
+
         }
 
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

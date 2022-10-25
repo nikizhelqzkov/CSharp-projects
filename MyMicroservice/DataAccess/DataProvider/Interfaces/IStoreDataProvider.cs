@@ -6,10 +6,15 @@ namespace MyMicroservice.DataAccess.DataProvider.Interfaces
     {
         public List<Store> GetStores();
 
+        public Store GetStoreByIdWithDetails(int id);
+
         public Store GetStoreById(int id);
 
         public void AddStore(Store data);
 
         public int GetMaxedStore();
+
+        public void UpdateStoreById();
+
     }
 }

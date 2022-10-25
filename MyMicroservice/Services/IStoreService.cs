@@ -9,5 +9,8 @@ namespace MyMicroservice.Services
         public Store GetStoreById(int id);
 
         public void AddStore(Store data);
+
+        public void UpdateStoreById(int id, Store data);
+
     }
 }
