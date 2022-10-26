@@ -37,19 +37,71 @@ namespace MyMicroservice.DataAccess.DataProvider.Clients
             return order;
         }
 
-        public Order? GetOrder(int id)
+        public Order? GetOrderWithItems(int id)
         {
             var result = (from o in DbContext.Orders.AsNoTracking()
-                              //join ordItems in DbContext.OrderItems on o.OrderId equals ordItems.OrderId
+                          join ordItem in DbContext.OrderItems on o.OrderId equals ordItem.OrderId
                           where o.OrderId == id
-                          select o).FirstOrDefault();
+                          select new Order
+                          {
+                              OrderId = o.OrderId,
+                              OrderDate = o.OrderDate,
+                              RequiredDate = o.RequiredDate,
+                              ShippedDate = o.ShippedDate,
+                              CustomerId = o.CustomerId,
+                              StaffId = o.StaffId,
+                              StoreId = o.StoreId,
+                              OrderItems = new List<OrderItem>
+                              {
+                                  new OrderItem
+                                  {
+                                      OrderId = ordItem.OrderId,
+                                      ProductId = ordItem.ProductId,
+                                      Quantity = ordItem.Quantity,
+                                      ListPrice = ordItem.ListPrice,
+                                      Discount = ordItem.Discount
+                                  }
+                              }
+                          }).FirstOrDefault();
+            return result;
+        }
+        public Order? GetOrder(int id)
+        {
+            var result = DbContext.Orders.AsNoTracking().FirstOrDefault(o => o.OrderId == id);
             return result;
         }
 
         public async Task<IEnumerable<Order>> GetOrders(int page = 1, int maxItemsPerPage = 20)
         {
-            return await DbContext.Orders.Include(o => o.OrderItems)
-                .Skip((page - 1) * maxItemsPerPage).Take(maxItemsPerPage).ToListAsync();
+            return await (from o in DbContext.Orders
+                          join ordItem in DbContext.OrderItems on o.OrderId equals ordItem.OrderId
+                          select new Order
+                          {
+                              OrderId = o.OrderId,
+                              OrderDate = o.OrderDate,
+                              RequiredDate = o.RequiredDate,
+                              ShippedDate = o.ShippedDate,
+                              CustomerId = o.CustomerId,
+                              StaffId = o.StaffId,
+                              StoreId = o.StoreId,
+                              OrderItems = new List<OrderItem>
+                              {
+                                  new OrderItem
+                                  {
+                                      OrderId = ordItem.OrderId,
+                                      ProductId = ordItem.ProductId,
+                                      Quantity = ordItem.Quantity,
+                                      ListPrice = ordItem.ListPrice,
+                                      Discount = ordItem.Discount
+                                  }
+                              }
+                          })
+                         .Skip((page - 1) * maxItemsPerPage)
+                         .Take(maxItemsPerPage)
+                         .ToListAsync();
+
+            //DbContext.Orders.Include(o => o.OrderItems)
+            //.Skip((page - 1) * maxItemsPerPage).Take(maxItemsPerPage).ToListAsync();
         }
     }
 }

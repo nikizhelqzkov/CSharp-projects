@@ -2,6 +2,7 @@
 using MyMicroservice.DataAccess.DataProvider.Interfaces;
 using MyMicroservice.DTOModels;
 using AutoMapper;
+using MyMicroservice.Helper.CustomMappings;
 
 namespace MyMicroservice.Services
 {
@@ -29,9 +30,20 @@ namespace MyMicroservice.Services
             _orderDataProvider.DeleteOrder(result);
         }
 
-        public async Task<Order> GetDetailedOrder(int id)
+        public async Task<OrderDTO?> GetDetailedOrder(int id)
         {
-            return await _orderDataProvider.GetDetailedOrder(id);
+            var order = await _orderDataProvider.GetDetailedOrder(id);
+            if (order == null)
+            {
+                return null;
+            }
+            var result = _mapper.Map<Order, OrderDTO>(order);
+            result = OrderAddition.AdditionMap(order, result);
+            result.OrderItems = OrderItemAddition.AddListMap(order.OrderItems, result.OrderItems);
+
+
+
+            return result;
         }
 
         public OrderDTO? GetOrder(int id)
@@ -48,9 +60,20 @@ namespace MyMicroservice.Services
 
         public async Task<IEnumerable<OrderDTO>> GetOrders(int page, int maxItemsPerPage)
         {
-            var orders = await _orderDataProvider.GetOrders(page, maxItemsPerPage);
-            var result = _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(orders);
-            return result;
+            var order = await _orderDataProvider.GetOrders(page, maxItemsPerPage);
+            var result = _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(order);
+            int size = result.Count();
+            var resultItems = new List<OrderDTO>();
+            for (int i = 0; i < size; i++)
+            {
+                var res = OrderAddition.AdditionMap(order.ElementAt(i), result.ElementAt(i));
+                res.OrderItems = OrderItemAddition.AddListMap(order.ElementAt(i).OrderItems, res.OrderItems);
+                resultItems.Add(res);
+            }
+
+
+
+            return resultItems;
         }
     }
 }

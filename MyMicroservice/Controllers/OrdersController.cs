@@ -38,7 +38,7 @@ namespace MyMicroservice.Controllers
 
         // GET: api/Orders/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(int id)
+        public async Task<ActionResult<OrderDTO>> GetOrder(int id)
         {
             var order = await _service.GetDetailedOrder(id);
 
@@ -47,42 +47,9 @@ namespace MyMicroservice.Controllers
                 return NotFound();
             }
 
-            return order;
+            return Ok(order);
         }
 
-        //// PUT: api/Orders/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutOrder(int id, Order order)
-        //{
-        //    if (id != order.OrderId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _service.Entry(order).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _service.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!OrderExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        // POST: api/Orders
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<IActionResult> PostOrder(OrderRequest request)
         {
@@ -103,15 +70,10 @@ namespace MyMicroservice.Controllers
                 return NotFound();
             }
 
-            _service.DeleteOrder(order);
-            //await _service.SaveChangesAsync();
+            //_service.DeleteOrder(order);
 
             return NoContent();
         }
 
-        //private bool OrderExists(int id)
-        //{
-        //    return _service.Orders.Any(e => e.OrderId == id);
-        //}
     }
 }

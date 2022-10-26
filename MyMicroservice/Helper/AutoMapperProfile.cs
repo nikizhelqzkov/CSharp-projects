@@ -8,6 +8,9 @@ namespace MyMicroservice.Helper
     {
         public AutoMapperProfile()
         {
+
+            CreateMap<Store, StoreDTO>().ReverseMap();
+
             CreateMap<OrderDTO, Order>()
                 .ForMember(
                             dest => dest.OrderId,
@@ -49,6 +52,8 @@ namespace MyMicroservice.Helper
                 //          dest => dest.Product.ProductName,
                 //          opt => opt.MapFrom(src => src.ProductName))
                 .ReverseMap();
+
+
         }
     }
 }

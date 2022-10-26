@@ -4,6 +4,7 @@ namespace MyMicroservice.DTOModels
 {
     public class OrderDTO
     {
+
         public int Id { get; set; }
 
         public int StoreId { get; set; }

@@ -6,7 +6,7 @@ namespace MyMicroservice.Services
     public interface IOrderService
     {
         public Task<IEnumerable<OrderDTO>> GetOrders(int page, int maxItemsPerPage);
-        Task<Order> GetDetailedOrder(int id);
+        Task<OrderDTO?> GetDetailedOrder(int id);
         Task CreateOrder(OrderDTO order);
 
         void DeleteOrder(OrderDTO order);

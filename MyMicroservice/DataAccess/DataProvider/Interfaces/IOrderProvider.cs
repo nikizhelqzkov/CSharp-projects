@@ -8,6 +8,7 @@ namespace MyMicroservice.DataAccess.DataProvider.Interfaces
         Task<Order> GetDetailedOrder(int id);
         Task CreateOrder(Order order);
         Order? GetOrder(int id);
+        Order? GetOrderWithItems(int id);
         void DeleteOrder(Order result);
     }
 }
