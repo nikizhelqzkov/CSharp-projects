@@ -47,6 +47,10 @@
               "target": "Package",
               "version": "[12.0.0, )"
             },
+            "EfCore.SchemaCompare": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
               "version": "[6.0.10, )"
@@ -60,6 +64,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.10, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.25.0, )"
             },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",

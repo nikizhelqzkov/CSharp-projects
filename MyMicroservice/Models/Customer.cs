@@ -14,6 +14,7 @@ namespace MyMicroservice.Models
         public Customer()
         {
             Orders = new HashSet<Order>();
+            Users = new HashSet<User>();
         }
 
         [Key]
@@ -57,5 +58,7 @@ namespace MyMicroservice.Models
 
         [InverseProperty("Customer")]
         public virtual ICollection<Order> Orders { get; set; }
+        [InverseProperty("Customer")]
+        public virtual ICollection<User> Users { get; set; }
     }
 }

@@ -28,6 +28,7 @@ namespace MyMicroservice.DataContext
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<Stock> Stocks { get; set; }
         public virtual DbSet<Store> Stores { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

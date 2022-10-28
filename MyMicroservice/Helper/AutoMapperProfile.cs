@@ -15,32 +15,26 @@ namespace MyMicroservice.Helper
                 .ForMember(
                             dest => dest.OrderId,
                             opt => opt.MapFrom(src => src.Id))
-                .ForMember(
-                            dest => dest.OrderDate,
-                            opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(
-                            dest => dest.OrderStatus,
-                            opt => opt.MapFrom(src => 4))
+                .ForPath(
+                            dest => dest.Store.StoreName,
+                            opt => opt.MapFrom(src => src.StoreName))
 
-                //.ForMember(
-                //            dest => dest.Store.StoreName,
-                //            opt => opt.MapFrom(src => src.StoreName))
-                //.ForMember(
-                //            dest => dest.Customer.FirstName,
-                //            opt => opt.MapFrom(src => src.CustomerFirstName))
-                //.ForMember(
-                //            dest => dest.Customer.LastName,
-                //            opt => opt.MapFrom(src => src.CustomerLastName))
-                //.ForMember(
-                //            dest => dest.Customer.Email,
-                //            opt => opt.MapFrom(src => src.CustomerEmail))
-                //.ForMember(
-                //            dest => dest.Staff.FirstName,
-                //            opt => opt.MapFrom(src => src.StaffFirstName))
-                //.ForMember(
-                //            dest => dest.Staff.LastName,
-                //            opt => opt.MapFrom(src => src.StaffLastName))
-                .ForMember(
+                .ForPath(
+                            dest => dest.Customer.FirstName,
+                            opt => opt.MapFrom(src => src.CustomerFirstName))
+                .ForPath(
+                            dest => dest.Customer.LastName,
+                            opt => opt.MapFrom(src => src.CustomerLastName))
+                .ForPath(
+                            dest => dest.Customer.Email,
+                            opt => opt.MapFrom(src => src.CustomerEmail))
+                .ForPath(
+                            dest => dest.Staff.FirstName,
+                            opt => opt.MapFrom(src => src.StaffFirstName))
+                .ForPath(
+                            dest => dest.Staff.LastName,
+                            opt => opt.MapFrom(src => src.StaffLastName))
+                .ForPath(
                             dest => dest.OrderItems,
                             opt => opt.MapFrom(src => src.OrderItems))
                 .ReverseMap();
@@ -48,10 +42,13 @@ namespace MyMicroservice.Helper
 
 
             CreateMap<OrderItemsDTO, OrderItem>()
-                //.ForMember(
-                //          dest => dest.Product.ProductName,
-                //          opt => opt.MapFrom(src => src.ProductName))
+                .ForPath(
+                          dest => dest.Product.ProductName,
+                          opt => opt.MapFrom(src => src.ProductName))
                 .ReverseMap();
+
+            CreateMap<Customer, CustomerDTO>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
 
 
         }

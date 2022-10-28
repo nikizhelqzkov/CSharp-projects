@@ -17,6 +17,9 @@ namespace MyMicroservice.DTOModels
 
         public DateTime? ShippedDate { get; set; }
 
+        public DateTime? OrderDate { get; set; }
+
+        public byte? OrderStatus { get; set; }
         public string? StoreName { get; set; }
 
         public string? CustomerFirstName { get; set; }

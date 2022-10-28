@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using MyMicroservice.DataAccess.DataProvider.Interfaces;
+using MyMicroservice.DataAccess.Requests;
+using MyMicroservice.DTOModels;
 using MyMicroservice.Models;
 
 namespace MyMicroservice.Services
@@ -15,31 +17,51 @@ namespace MyMicroservice.Services
             _mapper = mapper;
         }
 
-        public void AddStore(Store data)
+        private StoreDTO FromRequestToDTO(StoreRequest request)
         {
-            _storeDataProvider.AddStore(data);
+            StoreDTO dto = new StoreDTO();
+            dto.StoreName = request.StoreName;
+            dto.Phone = request.Phone ?? null;
+            dto.Email = request.Email ?? null;
+            dto.Street = request.Street ?? null;
+            dto.City = request.City ?? null;
+            dto.State = request.State ?? null;
+            dto.ZipCode = request.ZipCode ?? null;
+            return dto;
         }
 
-        public Store GetStoreById(int id)
+        public void AddStore(StoreRequest request)
         {
+            var data = FromRequestToDTO(request);
+            var store = _mapper.Map<Store>(data);
+            _storeDataProvider.AddStore(store);
+        }
+
+        public StoreDTO GetStoreById(int id)
+        {
+
             var result = _storeDataProvider.GetStoreByIdWithDetails(id);
-            return result;
+
+            return _mapper.Map<StoreDTO>(result);
         }
 
-        public List<Store> GetStores()
+        public List<StoreDTO> GetStores()
         {
-            return _storeDataProvider.GetStores();
+            var store = _storeDataProvider.GetStores();
+
+            return _mapper.Map<List<StoreDTO>>(store);
         }
 
-        public void UpdateStoreById(int id, Store data)
+        public void UpdateStoreById(int id, StoreDTO data)
         {
             var oldStore = _storeDataProvider.GetStoreById(id);
+
             if (oldStore == null)
             {
-                _storeDataProvider.AddStore(data);
+
+                _storeDataProvider.AddStore(_mapper.Map<Store>(data));
                 return;
             }
-
             oldStore.Street = data.Street;
             oldStore.Email = data.Email;
             oldStore.City = data.City;

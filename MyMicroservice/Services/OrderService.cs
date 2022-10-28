@@ -19,6 +19,7 @@ namespace MyMicroservice.Services
 
         public async Task CreateOrder(OrderDTO requestOrder)
         {
+            requestOrder.OrderDate = DateTime.Now;
             var order = _mapper.Map<OrderDTO, Order>(requestOrder);
 
             await _orderDataProvider.CreateOrder(order);
@@ -38,11 +39,6 @@ namespace MyMicroservice.Services
                 return null;
             }
             var result = _mapper.Map<Order, OrderDTO>(order);
-            result = OrderAddition.AdditionMap(order, result);
-            result.OrderItems = OrderItemAddition.AddListMap(order.OrderItems, result.OrderItems);
-
-
-
             return result;
         }
 
@@ -60,20 +56,14 @@ namespace MyMicroservice.Services
 
         public async Task<IEnumerable<OrderDTO>> GetOrders(int page, int maxItemsPerPage)
         {
-            var order = await _orderDataProvider.GetOrders(page, maxItemsPerPage);
-            var result = _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(order);
-            int size = result.Count();
-            var resultItems = new List<OrderDTO>();
-            for (int i = 0; i < size; i++)
+            var orders = await _orderDataProvider.GetOrders(page, maxItemsPerPage);
+            var result = new List<OrderDTO>();
+            foreach (var order in orders)
             {
-                var res = OrderAddition.AdditionMap(order.ElementAt(i), result.ElementAt(i));
-                res.OrderItems = OrderItemAddition.AddListMap(order.ElementAt(i).OrderItems, res.OrderItems);
-                resultItems.Add(res);
+                var newDto = _mapper.Map<Order, OrderDTO>(order);
+                result.Add(newDto);
             }
-
-
-
-            return resultItems;
+            return result;
         }
     }
 }

@@ -17,7 +17,6 @@ namespace MyMicroservice.Helper.CustomMappings
             {
                 dest.StoreName = src.Store.StoreName ?? null;
             }
-            //dest.StoreName = src.Store.StoreName ?? null;
             if (src.Staff != null)
             {
                 dest.StaffFirstName = src.Staff.FirstName ?? null;
@@ -28,7 +27,7 @@ namespace MyMicroservice.Helper.CustomMappings
         }
         public static Order AdditionMap(OrderDTO src, Order dest)
         {
-            //dest.Store.StoreName = src.StoreName ?? null;
+            dest.Store.StoreName = src.StoreName ?? null;
             dest.Customer.FirstName = src.CustomerFirstName ?? null;
             dest.Customer.LastName = src.CustomerLastName ?? null;
             dest.Customer.Email = src.CustomerEmail ?? null;

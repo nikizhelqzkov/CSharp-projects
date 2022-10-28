@@ -55,6 +55,7 @@ namespace MyMicroservice.Controllers
         {
             OrderDTO order = request.Order;
             order.OrderItems = request.OrderItems;
+            order.OrderStatus = 4;
             await _service.CreateOrder(order);
 
             return Created("New Order", order);

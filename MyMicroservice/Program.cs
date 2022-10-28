@@ -17,16 +17,14 @@ namespace BikeApp
             builder.Services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-            //builder.Services.AddDbContext<FMCData81_DevHackathonContext>(options =>
-            //{
-            //    options.UseSqlServer(builder.Configuration.GetConnectionString("FmcUser"));
-            //});
             builder.Services.AddDbContext<BikeStoresDBContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Local"));
             })
+                .AddScoped<IAuthService, AuthService>()
                 .AddScoped<IStoreService, StoreService>()
                 .AddScoped<IOrderService, OrderService>()
+                .AddScoped<IAuthProvider, AuthProvider>()
                 .AddScoped<IStoreDataProvider, StoreProvider>()
                 .AddScoped<IOrderProvider, OrderProvider>()
              .AddControllers()

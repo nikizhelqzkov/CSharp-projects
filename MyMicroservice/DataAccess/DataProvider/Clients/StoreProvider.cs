@@ -39,9 +39,60 @@ namespace MyMicroservice.DataAccess.DataProvider.Clients
 
         public Store GetStoreByIdWithDetails(int id)
         {
-            var result = DbContext.Stores
-               .Include(store => store.Orders)
-               .FirstOrDefault(store => store.StoreId == id);
+            var result = (from store in DbContext.Stores
+                          join order in DbContext.Orders on store.StoreId equals order.StoreId
+                          join staff in DbContext.Staffs on store.StoreId equals staff.StoreId
+                          join stock in DbContext.Stocks on store.StoreId equals stock.StoreId
+                          where store.StoreId == id
+                          select new Store
+                          {
+                              StoreId = store.StoreId,
+                              StoreName = store.StoreName,
+                              Phone = store.Phone,
+                              Email = store.Email,
+                              Street = store.Street,
+                              City = store.City,
+                              State = store.State,
+                              ZipCode = store.ZipCode,
+                              Orders = new List<Order>
+                            {
+                              new Order
+                              {
+
+                              OrderId = order.OrderId,
+                              OrderDate = order.OrderDate,
+                              RequiredDate = order.RequiredDate,
+                              ShippedDate = order.ShippedDate,
+                              CustomerId = order.CustomerId,
+                              StaffId = order.StaffId,
+                              StoreId = order.StoreId,
+                              }
+                            },
+                              Staff = new List<Staff>
+                             {
+                                 new Staff
+                                 {
+                                    StaffId = staff.StaffId,
+                                    FirstName = staff.FirstName,
+                                    LastName = staff.LastName,
+                                    Email = staff.Email,
+                                    Phone = staff.Phone,
+                                    Active = staff.Active,
+                                    StoreId = staff.StoreId,
+                                    ManagerId = staff.ManagerId,
+                                 }
+                             },
+                              Stocks = new List<Stock>
+                             {
+                                 new Stock
+                                 {
+                                     StoreId = stock.StoreId,
+                                     ProductId = stock.ProductId,
+                                     Quantity = stock.Quantity
+                                 }
+                             }
+
+                          }).FirstOrDefault();
             return result;
         }
 

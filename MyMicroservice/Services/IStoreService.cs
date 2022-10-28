@@ -1,16 +1,18 @@
-﻿using MyMicroservice.Models;
+﻿using MyMicroservice.DataAccess.Requests;
+using MyMicroservice.DTOModels;
+using MyMicroservice.Models;
 
 namespace MyMicroservice.Services
 {
     public interface IStoreService
     {
-        public List<Store> GetStores();
+        public List<StoreDTO> GetStores();
 
-        public Store GetStoreById(int id);
+        public StoreDTO GetStoreById(int id);
 
-        public void AddStore(Store data);
+        public void AddStore(StoreRequest data);
 
-        public void UpdateStoreById(int id, Store data);
+        public void UpdateStoreById(int id, StoreDTO data);
 
     }
 }

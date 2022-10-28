@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyMicroservice.DataAccess.DataProvider.Interfaces;
+using MyMicroservice.DataAccess.Requests;
+using MyMicroservice.DTOModels;
 using MyMicroservice.Models;
 using MyMicroservice.Services;
 
@@ -18,7 +20,7 @@ namespace MyMicroservice.Controllers
             _service = service;
         }
         [HttpGet]
-        public ActionResult<List<Store>> GetAllStores()
+        public ActionResult<List<StoreDTO>> GetAllStores()
         {
             var result = _service.GetStores();
             if (result != null)
@@ -30,7 +32,7 @@ namespace MyMicroservice.Controllers
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public ActionResult<Store> GetStore(int id)
+        public ActionResult<StoreDTO> GetStore(int id)
         {
             var result = _service.GetStoreById(id);
             if (result == null)
@@ -42,15 +44,16 @@ namespace MyMicroservice.Controllers
 
         // POST api/<ValuesController>
         [HttpPost]
-        public IActionResult Post([FromBody] Store request)
+        public IActionResult Post([FromBody] StoreRequest request)
         {
+
             _service.AddStore(request);
             return Created($"Added new store with id", request);
         }
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Store request)
+        public IActionResult Put(int id, [FromBody] StoreDTO request)
         {
             if (request is null)
             {
