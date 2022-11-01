@@ -8,6 +8,7 @@ using MyMicroservice.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Net;
 
 namespace MyMicroservice.Services
 {
@@ -15,16 +16,20 @@ namespace MyMicroservice.Services
     {
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAuthProvider _authProvider;
 
-        public AuthService(IAuthProvider authProvider, IMapper mapper, IConfiguration configuration)
+
+        public AuthService(IAuthProvider authProvider, IMapper mapper, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _authProvider = authProvider;
             _mapper = mapper;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<bool> PasswordVerify(UserLoginRequest request, UserDTO dbUser)
+
+        public bool PasswordVerify(UserLoginRequest request, UserDTO dbUser)
         {
             bool isValidPassword = VerifyPasswordHash(request.Password, dbUser.PasswordHash, dbUser.PasswordSalt);
             return isValidPassword;
@@ -34,7 +39,7 @@ namespace MyMicroservice.Services
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(requestedPassword));
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(requestedPassword));
                 return computedHash.SequenceEqual(passwordHash);
             }
 
@@ -45,6 +50,7 @@ namespace MyMicroservice.Services
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
@@ -55,7 +61,7 @@ namespace MyMicroservice.Services
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddMinutes(1),
                 signingCredentials: creds);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
@@ -124,24 +130,51 @@ namespace MyMicroservice.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        //public async Task<bool> ChangePassword(UserChangePasswordRequest request)
-        //{
-        //    var user = await _authProvider.GetUser(request.Username);
-        //    if (user is null)
-        //    {
-        //        return false;
-        //    }
-        //    if (!ValidatePassword(user))
-        //    {
-        //        return false;
-        //    }
-        //    GeneratePasswordHash(request.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
-        //    user.PasswordHash = passwordHash;
-        //    user.PasswordSalt = passwordSalt;
-        //    await _authProvider.UpdateUser(user);
-        //    return true;
-        //}
+        public string GetIdFromUser()
+        {
+            var result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return result;
+        }
 
+        public void SetToken(string token)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.Now.AddMinutes(1)
+            };
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("TokenUser", token, cookieOptions);
+
+        }
+
+        public async Task<UserResponse> GetUserById(int id)
+        {
+            var user = await _authProvider.GetUserById(id);
+            if (user == null)
+            {
+                return null;
+            }
+            var userResponse = _mapper.Map<UserDTO>(user);
+            var customerResponse = _mapper.Map<CustomerDTO>(user.Customer);
+            var token = _httpContextAccessor.HttpContext.Request.Cookies["TokenUser"];
+            if (token == null)
+            {
+                return new UserResponse
+                {
+                    User = userResponse,
+                    UserInfo = customerResponse
+                };
+            }
+            return new UserResponse
+            {
+                User = userResponse,
+                UserInfo = customerResponse,
+                Token = token
+            };
+
+
+
+        }
     }
 }
 

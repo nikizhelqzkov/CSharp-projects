@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyMicroservice.DataAccess.DataProvider.Interfaces;
 using MyMicroservice.DataAccess.Requests;
 using MyMicroservice.DTOModels;
@@ -11,6 +12,7 @@ namespace MyMicroservice.Controllers
 {
     [Route("api/store")]
     [ApiController]
+    [Authorize]
     public class StoreController : ControllerBase
     {
         // GET: api/<ValuesController>
@@ -19,7 +21,7 @@ namespace MyMicroservice.Controllers
         {
             _service = service;
         }
-        [HttpGet]
+        [HttpGet, AllowAnonymous]
         public ActionResult<List<StoreDTO>> GetAllStores()
         {
             var result = _service.GetStores();
