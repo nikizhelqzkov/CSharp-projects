@@ -12,6 +12,7 @@ using MyMicroservice.DataAccess.Requests;
 using MyMicroservice.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MyMicroservice.Controllers
 {
@@ -38,9 +39,9 @@ namespace MyMicroservice.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserLoginRequest request)
+        public ActionResult<string> Login(UserLoginRequest request)
         {
-            var user = await _service.GetUser(request.UserName);
+            var user = _service.GetUser(request.UserName);
             if (user == null)
             {
                 return BadRequest("Invalid username");
@@ -55,13 +56,9 @@ namespace MyMicroservice.Controllers
             return Ok(token);
         }
         // GET: api/Auth
-        [HttpGet]
-        public async Task<ActionResult<UserResponse>> GetUser()
+        [HttpGet, Authorize]
+        public ActionResult<UserResponse> GetUser()
         {
-            if (Request.Cookies["TokenUser"] == null)
-            {
-                return Unauthorized("Expired Token");
-            }
 
             var stringUserId = _service.GetIdFromUser();
             if (stringUserId == null)
@@ -69,7 +66,7 @@ namespace MyMicroservice.Controllers
                 return BadRequest("Invalid User Id");
             }
             int userId = int.Parse(stringUserId);
-            var user = await _service.GetUserById(userId);
+            var user = _service.GetUserById(userId);
 
             return Ok(user);
         }

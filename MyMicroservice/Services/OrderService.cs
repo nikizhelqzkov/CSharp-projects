@@ -54,9 +54,21 @@ namespace MyMicroservice.Services
 
         }
 
-        public async Task<IEnumerable<OrderDTO>> GetOrders(int page, int maxItemsPerPage)
+        public IEnumerable<OrderDTO> GetOrders(int page, int maxItemsPerPage)
         {
-            var orders = await _orderDataProvider.GetOrders(page, maxItemsPerPage);
+            var orders = _orderDataProvider.GetOrders(page, maxItemsPerPage);
+            var result = new List<OrderDTO>();
+            foreach (var order in orders)
+            {
+                var newDto = _mapper.Map<Order, OrderDTO>(order);
+                result.Add(newDto);
+            }
+            return result;
+        }
+
+        public IEnumerable<OrderDTO> GetOrdersByUser(int customerId, int page, int items)
+        {
+            var orders = _orderDataProvider.GetOrders(customerId, page, items);
             var result = new List<OrderDTO>();
             foreach (var order in orders)
             {

@@ -13,36 +13,45 @@ namespace MyMicroservice.DataAccess.DataProvider.Clients
         }
         public BikeStoresDBContext DbContext { get; }
 
-        public async Task<User> GetUser(string username)
+        public Customer GetCustomerIfHasSameEmail(string email, string firstName, string lastname)
         {
-            return await DbContext.Users.FirstOrDefaultAsync(x => x.Username == username);
+            var user = (from customer in DbContext.Customers
+                        where customer.Email == email && customer.FirstName == firstName && customer.LastName == lastname
+                        select customer).FirstOrDefault();
+
+            return user;
         }
 
-        public async Task<User> GetUserById(int id)
+        public User GetUser(string username)
         {
-            var user = await (from u in DbContext.Users
-                              join c in DbContext.Customers on u.CustomerId equals c.CustomerId
-                              where u.UserId == id
-                              select new User
-                              {
-                                  UserId = u.UserId,
-                                  Username = u.Username,
-                                  PasswordHash = u.PasswordHash,
-                                  PasswordSalt = u.PasswordSalt,
-                                  CustomerId = u.CustomerId,
-                                  Customer = new Customer
-                                  {
-                                      CustomerId = c.CustomerId,
-                                      FirstName = c.FirstName,
-                                      LastName = c.LastName,
-                                      Phone = c.Phone,
-                                      Email = c.Email,
-                                      Street = c.Street,
-                                      City = c.City,
-                                      State = c.State,
-                                      ZipCode = c.ZipCode,
-                                  }
-                              }).FirstOrDefaultAsync();
+            return DbContext.Users.FirstOrDefault(x => x.Username == username);
+        }
+
+        public User GetUserById(int id)
+        {
+            var user = (from u in DbContext.Users
+                        join c in DbContext.Customers on u.CustomerId equals c.CustomerId
+                        where u.UserId == id
+                        select new User
+                        {
+                            UserId = u.UserId,
+                            Username = u.Username,
+                            PasswordHash = u.PasswordHash,
+                            PasswordSalt = u.PasswordSalt,
+                            CustomerId = u.CustomerId,
+                            Customer = new Customer
+                            {
+                                CustomerId = c.CustomerId,
+                                FirstName = c.FirstName,
+                                LastName = c.LastName,
+                                Phone = c.Phone,
+                                Email = c.Email,
+                                Street = c.Street,
+                                City = c.City,
+                                State = c.State,
+                                ZipCode = c.ZipCode,
+                            }
+                        }).FirstOrDefault();
             return user;
         }
 

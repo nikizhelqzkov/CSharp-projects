@@ -81,8 +81,21 @@ namespace MyMicroservice.Services
             user.Username = request.Username;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            user.Customer = FullfillCustomerInfo(request);
-            var customerResponse = _mapper.Map<CustomerDTO>(user.Customer);
+
+            //we will chack if we have same customer with same email if he has no account
+            var customer = _authProvider.GetCustomerIfHasSameEmail(request.Email, request.FirstName, request.LastName);
+            var customerResponse = new CustomerDTO();
+            if (customer != null)
+            {
+                customerResponse = _mapper.Map<CustomerDTO>(customer);
+                user.CustomerId = customerResponse.CustomerId;
+            }
+            else
+            {
+                user.Customer = FullfillCustomerInfo(request);
+                customerResponse = _mapper.Map<CustomerDTO>(user.Customer);
+            }
+
             var userResponse = _mapper.Map<UserDTO>(user);
             await _authProvider.Register(user);
 
@@ -124,9 +137,9 @@ namespace MyMicroservice.Services
             return hasSameUser;
         }
 
-        public async Task<UserDTO> GetUser(string username)
+        public UserDTO GetUser(string username)
         {
-            var user = await _authProvider.GetUser(username);
+            var user = _authProvider.GetUser(username);
             return _mapper.Map<UserDTO>(user);
         }
 
@@ -147,9 +160,9 @@ namespace MyMicroservice.Services
 
         }
 
-        public async Task<UserResponse> GetUserById(int id)
+        public UserResponse GetUserById(int id)
         {
-            var user = await _authProvider.GetUserById(id);
+            var user = _authProvider.GetUserById(id);
             if (user == null)
             {
                 return null;

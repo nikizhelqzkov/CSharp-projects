@@ -16,7 +16,7 @@ namespace MyMicroservice.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _service;
@@ -27,10 +27,21 @@ namespace MyMicroservice.Controllers
         }
 
         // GET: api/Orders
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDTO>>> GetOrders([FromQuery(Name = "page")] int page = 1, [FromQuery(Name = "Items")] int items = 20)
+        [HttpGet("/all")]
+        public ActionResult<IEnumerable<OrderDTO>> GetOrders([FromQuery(Name = "page")] int page = 1, [FromQuery(Name = "Items")] int items = 20)
         {
-            var result = await _service.GetOrders(page, items);
+            var result = _service.GetOrders(page, items);
+            if (result is null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<OrderDTO>> GetOrdersByUser([FromQuery(Name = "id")] int customerId, [FromQuery(Name = "page")] int page = 1, [FromQuery(Name = "Items")] int items = 20)
+        {
+            var result = _service.GetOrdersByUser(customerId, page, items);
             if (result is null)
             {
                 return BadRequest();

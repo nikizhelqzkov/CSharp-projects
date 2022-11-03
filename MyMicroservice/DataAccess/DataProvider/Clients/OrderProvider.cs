@@ -71,20 +71,20 @@ namespace MyMicroservice.DataAccess.DataProvider.Clients
             return result;
         }
 
-        public async Task<IEnumerable<Order>> GetOrders(int page = 1, int maxItemsPerPage = 20)
+        public IEnumerable<Order> GetOrders(int page = 1, int maxItemsPerPage = 20)
         {
-            return await (from o in DbContext.Orders
-                          join ordItem in DbContext.OrderItems on o.OrderId equals ordItem.OrderId
-                          select new Order
-                          {
-                              OrderId = o.OrderId,
-                              OrderDate = o.OrderDate,
-                              RequiredDate = o.RequiredDate,
-                              ShippedDate = o.ShippedDate,
-                              CustomerId = o.CustomerId,
-                              StaffId = o.StaffId,
-                              StoreId = o.StoreId,
-                              OrderItems = new List<OrderItem>
+            return (from o in DbContext.Orders
+                    join ordItem in DbContext.OrderItems on o.OrderId equals ordItem.OrderId
+                    select new Order
+                    {
+                        OrderId = o.OrderId,
+                        OrderDate = o.OrderDate,
+                        RequiredDate = o.RequiredDate,
+                        ShippedDate = o.ShippedDate,
+                        CustomerId = o.CustomerId,
+                        StaffId = o.StaffId,
+                        StoreId = o.StoreId,
+                        OrderItems = new List<OrderItem>
                               {
                                   new OrderItem
                                   {
@@ -95,13 +95,42 @@ namespace MyMicroservice.DataAccess.DataProvider.Clients
                                       Discount = ordItem.Discount
                                   }
                               }
-                          })
+                    })
                          .Skip((page - 1) * maxItemsPerPage)
                          .Take(maxItemsPerPage)
-                         .ToListAsync();
+                         .ToList();
 
-            //DbContext.Orders.Include(o => o.OrderItems)
-            //.Skip((page - 1) * maxItemsPerPage).Take(maxItemsPerPage).ToListAsync();
+        }
+
+        public IEnumerable<Order> GetOrders(int customerId, int page, int maxItemsPerPage)
+        {
+            return (from o in DbContext.Orders
+                    join ordItem in DbContext.OrderItems on o.OrderId equals ordItem.OrderId
+                    where o.CustomerId == customerId
+                    select new Order
+                    {
+                        OrderId = o.OrderId,
+                        OrderDate = o.OrderDate,
+                        RequiredDate = o.RequiredDate,
+                        ShippedDate = o.ShippedDate,
+                        CustomerId = o.CustomerId,
+                        StaffId = o.StaffId,
+                        StoreId = o.StoreId,
+                        OrderItems = new List<OrderItem>
+                              {
+                                  new OrderItem
+                                  {
+                                      OrderId = ordItem.OrderId,
+                                      ProductId = ordItem.ProductId,
+                                      Quantity = ordItem.Quantity,
+                                      ListPrice = ordItem.ListPrice,
+                                      Discount = ordItem.Discount
+                                  }
+                              }
+                    })
+                    .Skip((page - 1) * maxItemsPerPage)
+                    .Take(maxItemsPerPage)
+                    .ToList();
         }
     }
 }

@@ -5,12 +5,13 @@ namespace MyMicroservice.Services
 {
     public interface IOrderService
     {
-        public Task<IEnumerable<OrderDTO>> GetOrders(int page, int maxItemsPerPage);
+        public IEnumerable<OrderDTO> GetOrders(int page, int maxItemsPerPage);
         Task<OrderDTO?> GetDetailedOrder(int id);
         Task CreateOrder(OrderDTO order);
 
         void DeleteOrder(OrderDTO order);
 
         OrderDTO? GetOrder(int id);
+        IEnumerable<OrderDTO> GetOrdersByUser(int customerId, int page, int items);
     }
 }
