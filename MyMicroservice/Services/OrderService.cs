@@ -54,6 +54,18 @@ namespace MyMicroservice.Services
 
         }
 
+        public IEnumerable<OrderItemsDTO> GetOrderItems(int id)
+        {
+            var orderItems = _orderDataProvider.GetOrderItems(id);
+            var result = new List<OrderItemsDTO>();
+            foreach (var orderItem in orderItems)
+            {
+                var newDto = _mapper.Map<OrderItem, OrderItemsDTO>(orderItem);
+                result.Add(newDto);
+            }
+            return result;
+        }
+
         public IEnumerable<OrderDTO> GetOrders(int page, int maxItemsPerPage)
         {
             var orders = _orderDataProvider.GetOrders(page, maxItemsPerPage);

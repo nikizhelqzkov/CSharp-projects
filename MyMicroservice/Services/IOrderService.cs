@@ -13,5 +13,6 @@ namespace MyMicroservice.Services
 
         OrderDTO? GetOrder(int id);
         IEnumerable<OrderDTO> GetOrdersByUser(int customerId, int page, int items);
+        IEnumerable<OrderItemsDTO> GetOrderItems(int id);
     }
 }

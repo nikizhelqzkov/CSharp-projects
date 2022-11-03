@@ -106,6 +106,8 @@ namespace MyMicroservice.DataAccess.DataProvider.Clients
         {
             return (from o in DbContext.Orders
                     join ordItem in DbContext.OrderItems on o.OrderId equals ordItem.OrderId
+                    join product in DbContext.Products on ordItem.ProductId equals product.ProductId
+                    join store in DbContext.Stores on o.StoreId equals store.StoreId
                     where o.CustomerId == customerId
                     select new Order
                     {
@@ -116,21 +118,56 @@ namespace MyMicroservice.DataAccess.DataProvider.Clients
                         CustomerId = o.CustomerId,
                         StaffId = o.StaffId,
                         StoreId = o.StoreId,
+                        Store = new Store
+                        {
+                            StoreId = store.StoreId,
+                            StoreName = store.StoreName,
+                        },
                         OrderItems = new List<OrderItem>
                               {
                                   new OrderItem
                                   {
+                                      ItemId = ordItem.ItemId,
                                       OrderId = ordItem.OrderId,
                                       ProductId = ordItem.ProductId,
                                       Quantity = ordItem.Quantity,
                                       ListPrice = ordItem.ListPrice,
-                                      Discount = ordItem.Discount
+                                      Discount = ordItem.Discount,
+                                      Product = new Product
+                                      {
+                                          ProductId = product.ProductId,
+                                          ProductName = product.ProductName,
+                                          ModelYear = product.ModelYear
+                                      }
                                   }
                               }
                     })
                     .Skip((page - 1) * maxItemsPerPage)
                     .Take(maxItemsPerPage)
                     .ToList();
+        }
+
+        public IEnumerable<OrderItem> GetOrderItems(int id)
+        {
+            var items = (from ordItem in DbContext.OrderItems
+                         join product in DbContext.Products on ordItem.ProductId equals product.ProductId
+                         where ordItem.OrderId == id
+                         select new OrderItem
+                         {
+                             ItemId = ordItem.ItemId,
+                             OrderId = ordItem.OrderId,
+                             ProductId = ordItem.ProductId,
+                             Quantity = ordItem.Quantity,
+                             ListPrice = ordItem.ListPrice,
+                             Discount = ordItem.Discount,
+                             Product = new Product
+                             {
+                                 ProductId = product.ProductId,
+                                 ProductName = product.ProductName,
+                                 ModelYear = product.ModelYear
+                             }
+                         }).ToList();
+            return items;
         }
     }
 }

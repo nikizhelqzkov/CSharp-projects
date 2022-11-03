@@ -11,5 +11,6 @@ namespace MyMicroservice.DataAccess.DataProvider.Interfaces
         Order? GetOrderWithItems(int id);
         void DeleteOrder(Order result);
         IEnumerable<Order> GetOrders(int customerId, int page = 1, int items = 20);
+        IEnumerable<OrderItem> GetOrderItems(int id);
     }
 }

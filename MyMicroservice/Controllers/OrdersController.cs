@@ -63,6 +63,19 @@ namespace MyMicroservice.Controllers
             return Ok(order);
         }
 
+        [HttpGet("orderItems/{id}")]
+        public ActionResult<IEnumerable<OrderItemsDTO>> GetOrderItems(int id)
+        {
+            var orderItems = _service.GetOrderItems(id);
+
+            if (orderItems == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(orderItems);
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostOrder(OrderRequest request)
         {
