@@ -1,0 +1,12 @@
+﻿@model IEnumerable<DataViewModel>
+
+<div class="text-center">
+    @foreach (var data in Model)
+    {
+        <div class="item d-flex justify-content-between">
+            <span>@data.Name</span>
+            <span>@data.Age</span>
+        </div>
+    }
+</div>
+

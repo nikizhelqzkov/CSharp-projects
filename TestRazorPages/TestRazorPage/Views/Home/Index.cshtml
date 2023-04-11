@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+@*WITH HTML HELPERS*@
+<div class="text-center">
+    @Html.ActionLink("Click to go to test action in the Home Controller","Test","Home");
+</div>
+
+@*WITH TAG HELPERS*@
+<div class="text-center">
+   <a asp-action="test" asp-controller="Home">Click to go to test action in the Home Controller</a>
+</div>
+
+

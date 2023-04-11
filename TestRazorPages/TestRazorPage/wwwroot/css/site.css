@@ -1,0 +1,30 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+
+.item {
+    background: #ff6a00;
+    color: #00ff21;
+}   
+    
+
+.item span{
+    display: block;
+    font-size: 1rem;
+}
