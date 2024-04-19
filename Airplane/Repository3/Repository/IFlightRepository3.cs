@@ -19,7 +19,7 @@ namespace Repository3.Repository
 
         void AddFlightToAirport(Flight flight);
 
-        void UpdateFlight(Flight flight);
+        void UpdateFlight(string flightNumber);
 
         void UpdateFlightDepartureTime(string id, DateTime time);
 

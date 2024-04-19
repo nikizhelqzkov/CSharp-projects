@@ -39,13 +39,15 @@ namespace AirZone
             {
                 Console.WriteLine($"Flight Number: {flight.FlightNumber}, Departure: {flight.FromAirport}, Destination: {flight.ToAirport}, Departure Time: {flight.DepartureDateTime}, Arrival Time: {flight.ArrivalDateTime}"); 
             }
+
+            flightRepository.UpdateFlight(flightList[0].FlightNumber);
         }
 
         public static void Main(string[] args)
         {
             //PrintFlights();
-            PrintFLightWithUsing();
-            //PrintFlightsWithFilterAndValue("FromAirport", "JFK");
+            //PrintFLightWithUsing();
+            PrintFlightsWithFilterAndValue("FromAirport", "JFK");
 
         }
     }

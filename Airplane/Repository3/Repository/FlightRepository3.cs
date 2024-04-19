@@ -26,7 +26,7 @@ namespace Repository3.Repository
             var result = context.Flights.Where(flight => EF.Property<string>(flight, filter) == value);
 
 
-            return result.ToList(); ;
+            return result.ToList();
         }
 
         public Flight? GetLatestFlightFromDistination(string location)
@@ -124,11 +124,22 @@ namespace Repository3.Repository
             }
         }
 
-        public void UpdateFlight(Flight flight)
+        public void UpdateFlight(string flightNumber)
         {
             using var context = new Rise2Context();
-            context.Flights.Update(flight);
+            var newFlight = new Flight
+            {
+                FlightNumber = "NewFlightNumber",
+                FromAirport = "JFK",
+                ToAirport = "LAX",
+                DepartureDateTime = DateTime.Now,
+                ArrivalDateTime = DateTime.Now
+            };
+
+
+            context.Flights.Update(newFlight);
             context.SaveChanges();
+
         }
 
         public void UpdateFlightDepartureTime(string id, DateTime time)
